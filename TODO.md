@@ -1,27 +1,11 @@
-# Health Assistance System Development Plan
+# Backend Review & Fix for LoginApp - Progress Tracker
 
-## Approved Plan Summary:
-- Build on existing JavaFX/JDBC template.
-- New MySQL DB: `health_assist`.
-- Entities: User(roles), Patient, Doctor, Appointment, HealthRecord.
-- Role-based: Login -> Admin/Patient/Doctor dashboards with CRUD.
-- Multithreading: Scheduled reminders.
-- Reuses DBConnection, GUI patterns.
+## Approved Plan Steps:
 
-## TODO Steps:
-1. **[COMPLETE]** Create `init.sql` for DB schema (`health_assist` DB/tables).
-2. **[COMPLETE]** Update `src/database/DBConnection.java` (add health_assist connect method).
-3. **[COMPLETE]** Create model classes in `src/models/`: User.java, Patient.java, Doctor.java, Appointment.java, HealthRecord.java.
-4. **[COMPLETE]** Create `src/gui/LoginApp.java` (login screen with role check).
-5. **[PENDING]** Create role dashboards:
-   - `src/gui/AdminDashboard.java` (manage users/patients/doctors).
-   - `src/gui/PatientDashboard.java` (appts/records).
-   - `src/gui/DoctorDashboard.java` (appts/records/schedule).
-6. **[PENDING]** Add multithreading (ScheduledExecutorService for reminders in dashboards).
-7. **[PENDING]** Create `src/HealthAppRunner.java` (launch LoginApp).
-8. **[PENDING]** Compile all: Update compile/run instructions.
-9. **[PENDING]** Test: Run init.sql, login each role, CRUD, reminders.
-10. **[COMPLETE]** Update README.md with instructions.
+1. [✅] Update init.sql: Hash sample passwords using SHA-256 (adminpass, pass123, docpass). ✅
+2. [✅] Edit src/gui/LoginApp.java: Add onAction to loginBtn - validate via UserDAO, launch role-based dashboard on success, Alert on fail. (No UI changes) ✅
+3. [✅] Recompile project with compile.bat ✅
+4. [ ] Setup DB if needed: Run init.sql via MySQL
+5. [ ] Test: Run app via run.bat, login with hashed creds, verify dashboard navigation & backend works.
 
-**Next:** User: Run MySQL: `CREATE DATABASE health_assist;`, then `source init.sql`. Confirm DB ready.
-
+**Next: Complete step-by-step, updating this file on completion.**

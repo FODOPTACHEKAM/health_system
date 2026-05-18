@@ -58,11 +58,11 @@ CREATE TABLE health_records (
     FOREIGN KEY (doctor_id) REFERENCES doctors(id)
 );
 
--- Sample data (plain text pass for demo; hash in prod)
-INSERT INTO users (username, password_hash, role) VALUES 
-('admin1', 'adminpass', 'admin'),
-('patient1', 'pass123', 'patient'),
-('doctor1', 'docpass', 'doctor');
+-- Passwords: admin1=adminpass, patient1=pass123, doctor1=docpass
+INSERT INTO users (username, password_hash, role) VALUES
+('admin1',   SHA2('adminpass', 256), 'admin'),
+('patient1', SHA2('pass123',   256), 'patient'),
+('doctor1',  SHA2('docpass',   256), 'doctor');
 
 INSERT INTO patients (name, dob, contact, user_id) VALUES ('John Doe', '1990-01-01', '1234567890', 2);
 
