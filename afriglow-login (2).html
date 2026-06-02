@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AfriGlow – Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:     #faf5ee;
+      --warm:      #f0e6d3;
+      --sand:      #d9c4a8;
+      --clay:      #b8956a;
+      --terracotta:#9c6b42;
+      --bark:      #5c3d2e;
+      --forest:    #2d4a3e;
+      --gold:      #c8a96e;
+      --gold-lite: #e8d5b0;
+      --text:      #2a1f14;
+      --muted:     #7a6555;
+      --error:     #c0392b;
+      --success:   #27ae60;
+    }
+
+    html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); overflow: hidden; }
+    .page { display: grid; grid-template-columns: 1fr 1fr; height: 100vh; }
+
+    /* LEFT */
+    .left { position: relative; overflow: hidden; background: var(--forest); }
+    .left-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 80%, rgba(200,169,110,.25) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 20%, rgba(184,149,106,.18) 0%, transparent 50%),
+        linear-gradient(145deg, #1a2e26 0%, #2d4a3e 45%, #3a5a4a 100%);
+    }
+    .botanical { position: absolute; opacity: .13; }
+    .botanical-1 { top: -80px; right: -80px; width: 380px; }
+    .botanical-2 { bottom: -60px; left: -60px; width: 300px; }
+    .left-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: 48px 52px; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-icon { width: 42px; height: 42px; background: linear-gradient(135deg, var(--gold), var(--clay)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .brand-name { font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; font-weight: 600; color: var(--cream); letter-spacing: .03em; }
+    .brand-tagline { font-size: .72rem; color: var(--gold-lite); letter-spacing: .18em; text-transform: uppercase; margin-top: 2px; }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; }
+    .hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--gold); }
+    .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.6rem, 4vw, 3.6rem); font-weight: 300; line-height: 1.12; color: var(--cream); }
+    .hero-title em { font-style: italic; color: var(--gold-lite); }
+    .hero-body { margin-top: 22px; font-size: .9rem; line-height: 1.7; color: rgba(250,245,238,.65); max-width: 340px; }
+    .badges { display: flex; gap: 12px; flex-wrap: wrap; }
+    .badge { display: flex; align-items: center; gap: 7px; background: rgba(200,169,110,.12); border: 1px solid rgba(200,169,110,.25); border-radius: 100px; padding: 8px 16px; font-size: .78rem; color: var(--gold-lite); }
+    .badge-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; }
+
+    /* RIGHT */
+    .right { display: flex; align-items: center; justify-content: center; background: var(--cream); padding: 40px 60px; position: relative; overflow: hidden; }
+    .right::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 90% 10%, rgba(184,149,106,.08) 0%, transparent 40%), radial-gradient(circle at 10% 90%, rgba(156,107,66,.06) 0%, transparent 40%); pointer-events: none; }
+
+    .form-card { position: relative; z-index: 1; width: 100%; max-width: 420px; animation: fadeUp .6s ease both; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+    .form-header { margin-bottom: 38px; }
+    .form-greeting { font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--clay); margin-bottom: 10px; }
+    .form-title { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 600; line-height: 1.1; color: var(--bark); }
+    .form-subtitle { margin-top: 10px; font-size: .87rem; color: var(--muted); line-height: 1.6; }
+
+    /* FIELDS */
+    .field-group { display: flex; flex-direction: column; gap: 18px; }
+    .field { display: flex; flex-direction: column; gap: 7px; }
+    .field label { font-size: .78rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--bark); }
+    .input-wrap { position: relative; }
+    .input-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--sand); pointer-events: none; transition: color .25s; }
+    .input-wrap:focus-within .input-icon { color: var(--terracotta); }
+    .field input { width: 100%; height: 52px; padding: 0 46px 0 44px; border: 1.5px solid var(--sand); border-radius: 10px; background: white; font-family: 'DM Sans', sans-serif; font-size: .92rem; color: var(--text); outline: none; transition: border-color .25s, box-shadow .25s; }
+    .field input::placeholder { color: #c5b09a; }
+    .field input:focus { border-color: var(--terracotta); box-shadow: 0 0 0 4px rgba(156,107,66,.1); }
+    .field input.error-state { border-color: var(--error); }
+    .field input.success-state { border-color: var(--success); }
+    .pwd-toggle { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--sand); transition: color .2s; display: flex; align-items: center; padding: 4px; }
+    .pwd-toggle:hover { color: var(--terracotta); }
+    .field-error { font-size: .76rem; color: var(--error); display: none; align-items: center; gap: 5px; }
+    .field-error.show { display: flex; }
+
+    .row-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
+    .remember { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
+    .remember input[type="checkbox"] { display: none; }
+    .checkmark { width: 18px; height: 18px; border: 1.5px solid var(--sand); border-radius: 5px; background: white; display: flex; align-items: center; justify-content: center; transition: all .2s; flex-shrink: 0; }
+    .remember input:checked ~ .checkmark { background: var(--terracotta); border-color: var(--terracotta); }
+    .remember input:checked ~ .checkmark::after { content: ''; width: 5px; height: 9px; border: 2px solid white; border-top: none; border-left: none; transform: rotate(45deg) translateY(-1px); display: block; }
+    .remember-label { font-size: .82rem; color: var(--muted); }
+    .forgot-link { font-size: .82rem; color: var(--terracotta); text-decoration: none; font-weight: 500; transition: color .2s; }
+    .forgot-link:hover { color: var(--bark); }
+
+    .btn-login { width: 100%; height: 54px; margin-top: 28px; background: linear-gradient(135deg, var(--bark) 0%, var(--terracotta) 100%); color: var(--cream); border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: .95rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; position: relative; overflow: hidden; transition: transform .18s, box-shadow .18s; box-shadow: 0 6px 24px rgba(92,61,46,.3); }
+    .btn-login::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, var(--terracotta) 0%, var(--clay) 100%); opacity: 0; transition: opacity .3s; }
+    .btn-login:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(92,61,46,.35); }
+    .btn-login:hover::before { opacity: 1; }
+    .btn-login:active { transform: translateY(0); }
+    .btn-login span { position: relative; z-index: 1; }
+    .btn-login .spinner { display: none; position: absolute; inset: 0; z-index: 2; align-items: center; justify-content: center; background: inherit; }
+    .btn-login.loading .spinner { display: flex; }
+    .btn-login.loading span { opacity: 0; }
+    .spin-ring { width: 22px; height: 22px; border: 2.5px solid rgba(255,255,255,.3); border-top-color: white; border-radius: 50%; animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .divider { display: flex; align-items: center; gap: 14px; margin: 28px 0; }
+    .divider-line { flex: 1; height: 1px; background: var(--warm); }
+    .divider-text { font-size: .75rem; color: var(--sand); letter-spacing: .12em; text-transform: uppercase; }
+
+    .social-row { display: flex; gap: 12px; }
+    .btn-social { flex: 1; height: 48px; border: 1.5px solid var(--warm); border-radius: 10px; background: white; display: flex; align-items: center; justify-content: center; gap: 9px; font-family: 'DM Sans', sans-serif; font-size: .85rem; color: var(--text); cursor: pointer; transition: border-color .2s, background .2s, transform .15s; }
+    .btn-social:hover { border-color: var(--clay); background: var(--warm); transform: translateY(-1px); }
+
+    .signup-prompt { text-align: center; margin-top: 28px; font-size: .84rem; color: var(--muted); }
+    .signup-prompt a { color: var(--terracotta); text-decoration: none; font-weight: 500; }
+    .signup-prompt a:hover { text-decoration: underline; }
+
+    /* Toast */
+    .toast { position: fixed; bottom: 32px; right: 32px; background: white; border-left: 4px solid var(--success); border-radius: 10px; padding: 16px 20px; box-shadow: 0 8px 32px rgba(0,0,0,.12); display: flex; align-items: center; gap: 12px; font-size: .88rem; transform: translateX(calc(100% + 40px)); transition: transform .4s cubic-bezier(.34,1.56,.64,1); z-index: 999; max-width: 320px; }
+    .toast.show { transform: translateX(0); }
+    .toast.error { border-color: var(--error); }
+    .toast-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .toast-title { font-weight: 500; color: var(--text); }
+    .toast-msg { font-size: .8rem; color: var(--muted); margin-top: 2px; }
+
+    @media (max-width: 900px) {
+      .page { grid-template-columns: 1fr; }
+      .left { display: none; }
+      .right { padding: 40px 28px; overflow-y: auto; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- LEFT PANEL -->
+  <aside class="left">
+    <div class="left-bg"></div>
+    <svg class="botanical botanical-1" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="200" cy="200" r="195" stroke="#c8a96e" stroke-width="1.5"/>
+      <circle cx="200" cy="200" r="160" stroke="#c8a96e" stroke-width=".8"/>
+      <path d="M200 5 Q240 100 200 200 Q160 100 200 5Z" stroke="#c8a96e" stroke-width="1" fill="none"/>
+      <path d="M200 395 Q240 300 200 200 Q160 300 200 395Z" stroke="#c8a96e" stroke-width="1" fill="none"/>
+      <path d="M5 200 Q100 240 200 200 Q100 160 5 200Z" stroke="#c8a96e" stroke-width="1" fill="none"/>
+      <path d="M395 200 Q300 240 200 200 Q300 160 395 200Z" stroke="#c8a96e" stroke-width="1" fill="none"/>
+      <circle cx="200" cy="200" r="30" stroke="#c8a96e" stroke-width="1"/>
+    </svg>
+    <svg class="botanical botanical-2" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M150 10 C180 80 220 120 290 150 C220 180 180 220 150 290 C120 220 80 180 10 150 C80 120 120 80 150 10Z" stroke="#c8a96e" stroke-width="1.2" fill="none"/>
+      <circle cx="150" cy="150" r="40" stroke="#c8a96e" stroke-width=".8"/>
+    </svg>
+    <div class="left-content">
+      <div class="brand">
+        <div class="brand-icon">✦</div>
+        <div>
+          <div class="brand-name">AfriGlow</div>
+          <div class="brand-tagline">Radiance Redefined</div>
+        </div>
+      </div>
+      <div class="hero-text">
+        <div class="hero-eyebrow">Your Skin Journey</div>
+        <h1 class="hero-title">Rooted in<br><em>African Botanicals,</em><br>crafted for you.</h1>
+        <p class="hero-body">Personalised skincare powered by ancestral wisdom and modern science. Discover routines, ingredients, and rituals that honour your skin's unique story.</p>
+      </div>
+      <div class="badges">
+        <div class="badge"><div class="badge-dot"></div> 100% Natural</div>
+        <div class="badge"><div class="badge-dot"></div> Dermatologist Tested</div>
+        <div class="badge"><div class="badge-dot"></div> African Sourced</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- RIGHT PANEL -->
+  <main class="right">
+    <div class="form-card">
+      <div class="form-header">
+        <p class="form-greeting">Welcome back</p>
+        <h2 class="form-title">Sign in to<br>AfriGlow</h2>
+        <p class="form-subtitle">Access your personalised skincare dashboard and daily rituals.</p>
+      </div>
+
+      <form id="loginForm" novalidate>
+        <div class="field-group">
+
+          <!-- Email -->
+          <div class="field" id="emailField">
+            <label for="email">Email address</label>
+            <div class="input-wrap">
+              <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="3"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+              </svg>
+              <input type="email" id="email" name="email" placeholder="your@email.com" autocomplete="email"/>
+            </div>
+            <div class="field-error" id="emailError">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span id="emailErrorMsg">Please enter a valid email address.</span>
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="field" id="passwordField">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+              <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password"/>
+              <button type="button" class="pwd-toggle" id="pwdToggle" aria-label="Toggle password visibility">
+                <svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+            <div class="field-error" id="passwordError">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span id="passwordErrorMsg">Password must be at least 8 characters.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row-meta" style="margin-top:18px;">
+          <label class="remember">
+            <input type="checkbox" id="rememberMe" name="rememberMe"/>
+            <div class="checkmark"></div>
+            <span class="remember-label">Remember me</span>
+          </label>
+          <a href="#" class="forgot-link" id="forgotLink">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn-login" id="loginBtn">
+          <span>Sign In</span>
+          <div class="spinner"><div class="spin-ring"></div></div>
+        </button>
+      </form>
+
+      <div class="divider">
+        <div class="divider-line"></div>
+        <span class="divider-text">or continue with</span>
+        <div class="divider-line"></div>
+      </div>
+
+      <div class="social-row">
+        <button class="btn-social" type="button" id="googleBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Sign in with Google
+        </button>
+      </div>
+
+      <p class="signup-prompt">New to AfriGlow? <a href="/signup.html" id="signupLink">Create your account</a></p>
+    </div>
+  </main>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <div class="toast-icon" id="toastIcon">✓</div>
+  <div>
+    <div class="toast-title" id="toastTitle">Success</div>
+    <div class="toast-msg" id="toastMsg"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     FIREBASE — loaded via CDN (no npm needed)
+══════════════════════════════════════════ -->
+<script type="module">
+  import { initializeApp }          from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+  import { getAnalytics }           from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js';
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup,
+    sendPasswordResetEmail,
+    setPersistence,
+    browserLocalPersistence,
+    browserSessionPersistence,
+    onAuthStateChanged
+  } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+
+  /* ══════════════════════════════════════════
+     🔥 YOUR FIREBASE CONFIG — LIVE & READY
+  ══════════════════════════════════════════ */
+  const firebaseConfig = {
+    apiKey:            "AIzaSyAsgKWggSEtT267FbMMtzfmZ3BX6ZW7gdI",
+    authDomain:        "afriglow-2d63b.firebaseapp.com",
+    projectId:         "afriglow-2d63b",
+    storageBucket:     "afriglow-2d63b.firebasestorage.app",
+    messagingSenderId: "1072150524785",
+    appId:             "1:1072150524785:web:ee8a878d647ed6c562fcd0",
+    measurementId:     "G-KVX93QP4EF"
+  };
+
+  /* ── After successful login, redirect here ── */
+  const AFTER_LOGIN_URL = '/dashboard.html'; // ← change to your dashboard page
+
+  /* ── Init Firebase services ── */
+  const app      = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const auth     = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  /* ── If user is already logged in, skip login page ── */
+  onAuthStateChanged(auth, user => {
+    if (user) window.location.href = AFTER_LOGIN_URL;
+  });
+
+  /* ══════════════════════════════════════════
+     HELPERS
+  ══════════════════════════════════════════ */
+  function showToast(title, msg, isError = false) {
+    const t = document.getElementById('toast');
+    t.className = 'toast' + (isError ? ' error' : '');
+    document.getElementById('toastIcon').textContent  = isError ? '✕' : '✓';
+    document.getElementById('toastTitle').textContent = title;
+    document.getElementById('toastMsg').textContent   = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 4500);
+  }
+
+  function setFieldError(fieldId, errorId, msg) {
+    document.getElementById(fieldId).querySelector('input').classList.add('error-state');
+    document.getElementById(errorId + 'Msg').textContent = msg;
+    document.getElementById(errorId).classList.add('show');
+  }
+  function clearFieldError(fieldId, errorId) {
+    document.getElementById(fieldId).querySelector('input').classList.remove('error-state');
+    document.getElementById(errorId).classList.remove('show');
+  }
+  function setFieldOk(fieldId) {
+    document.getElementById(fieldId).querySelector('input').classList.add('success-state');
+  }
+  function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+
+  /* ── Firebase error code → friendly message ── */
+  function friendlyError(code) {
+    const map = {
+      'auth/user-not-found':          'No account found with this email.',
+      'auth/wrong-password':          'Incorrect password. Please try again.',
+      'auth/invalid-email':           'That email address is not valid.',
+      'auth/user-disabled':           'This account has been disabled.',
+      'auth/too-many-requests':       'Too many attempts. Please wait and try again.',
+      'auth/network-request-failed':  'Network error. Check your connection.',
+      'auth/popup-closed-by-user':    'Sign-in popup was closed.',
+      'auth/cancelled-popup-request': 'Sign-in was cancelled.',
+      'auth/invalid-credential':      'Incorrect email or password.',
+      'auth/email-already-in-use':    'This email is already registered.',
+    };
+    return map[code] || 'Something went wrong. Please try again.';
+  }
+
+  /* ══════════════════════════════════════════
+     REAL-TIME FIELD VALIDATION
+  ══════════════════════════════════════════ */
+  document.getElementById('email').addEventListener('blur', function () {
+    if (!this.value)               { setFieldError('emailField', 'emailError', 'Email is required.'); return; }
+    if (!isValidEmail(this.value)) { setFieldError('emailField', 'emailError', 'Please enter a valid email address.'); return; }
+    clearFieldError('emailField', 'emailError');
+    setFieldOk('emailField');
+  });
+
+  document.getElementById('password').addEventListener('blur', function () {
+    if (!this.value)              { setFieldError('passwordField', 'passwordError', 'Password is required.'); return; }
+    if (this.value.length < 6)   { setFieldError('passwordField', 'passwordError', 'Password must be at least 6 characters.'); return; }
+    clearFieldError('passwordField', 'passwordError');
+    setFieldOk('passwordField');
+  });
+
+  /* ══════════════════════════════════════════
+     PASSWORD SHOW / HIDE
+  ══════════════════════════════════════════ */
+  document.getElementById('pwdToggle').addEventListener('click', function () {
+    const input  = document.getElementById('password');
+    const isText = input.type === 'text';
+    input.type   = isText ? 'password' : 'text';
+    document.getElementById('eyeIcon').innerHTML = isText
+      ? '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>'
+      : '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+  });
+
+  /* ══════════════════════════════════════════
+     FORGOT PASSWORD — sends real Firebase reset email
+  ══════════════════════════════════════════ */
+  document.getElementById('forgotLink').addEventListener('click', async function (e) {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    if (!email || !isValidEmail(email)) {
+      showToast('Email required', 'Type your email address above first.', true);
+      return;
+    }
+    try {
+      await sendPasswordResetEmail(auth, email);
+      showToast('Reset email sent ✉️', `Check your inbox at ${email} for a reset link.`);
+    } catch (err) {
+      showToast('Error', friendlyError(err.code), true);
+    }
+  });
+
+  /* ══════════════════════════════════════════
+     EMAIL + PASSWORD LOGIN — Firebase Auth
+  ══════════════════════════════════════════ */
+  document.getElementById('loginForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const email    = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const remember = document.getElementById('rememberMe').checked;
+    let valid = true;
+
+    if (!email)               { setFieldError('emailField',    'emailError',    'Email is required.');                    valid = false; }
+    else if (!isValidEmail(email)) { setFieldError('emailField','emailError',   'Please enter a valid email address.');   valid = false; }
+    else                      { clearFieldError('emailField',  'emailError'); }
+
+    if (!password)            { setFieldError('passwordField', 'passwordError', 'Password is required.');                 valid = false; }
+    else if (password.length < 6) { setFieldError('passwordField','passwordError','Password must be at least 6 characters.'); valid = false; }
+    else                      { clearFieldError('passwordField','passwordError'); }
+
+    if (!valid) return;
+
+    const btn = document.getElementById('loginBtn');
+    btn.classList.add('loading');
+    btn.disabled = true;
+
+    try {
+      /* Persist session based on "Remember me" checkbox */
+      await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
+
+      /* 🔥 Firebase sign-in */
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      const user   = result.user;
+
+      showToast('Welcome back! 🌿', `Hello ${user.displayName || email.split('@')[0]}! Redirecting…`);
+      setTimeout(() => { window.location.href = AFTER_LOGIN_URL; }, 1600);
+
+    } catch (err) {
+      const msg = friendlyError(err.code);
+      if (['auth/user-not-found','auth/invalid-email','auth/invalid-credential'].includes(err.code)) {
+        setFieldError('emailField', 'emailError', msg);
+      } else {
+        setFieldError('passwordField', 'passwordError', msg);
+      }
+      showToast('Sign-in failed', msg, true);
+    } finally {
+      btn.classList.remove('loading');
+      btn.disabled = false;
+    }
+  });
+
+  /* ══════════════════════════════════════════
+     GOOGLE SIGN-IN — Firebase Auth popup
+  ══════════════════════════════════════════ */
+  document.getElementById('googleBtn').addEventListener('click', async function () {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user   = result.user;
+      showToast('Signed in with Google ✓', `Welcome, ${user.displayName || 'friend'}! Redirecting…`);
+      setTimeout(() => { window.location.href = AFTER_LOGIN_URL; }, 1600);
+    } catch (err) {
+      const ignored = ['auth/popup-closed-by-user','auth/cancelled-popup-request'];
+      if (!ignored.includes(err.code)) {
+        showToast('Google sign-in failed', friendlyError(err.code), true);
+      }
+    }
+  });
+
+</script>
+
+</body>
+</html>
